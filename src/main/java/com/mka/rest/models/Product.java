@@ -10,9 +10,11 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
     @Column(name = "title")
     private String title;
     @Column(name = "cost")
-    private int cost;
+    private Integer cost;
+    @Column(name = "article")
+    private String article;
 }

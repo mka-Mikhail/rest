@@ -1,13 +1,14 @@
 package com.mka.rest.controllers;
 
+import com.mka.rest.dto.ProductDto;
 import com.mka.rest.models.Product;
 import com.mka.rest.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
+@RequestMapping("/app/api/v1/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -17,17 +18,31 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/app/products")
-    public List<Product> getProducts() {
-        return productService.getProducts();
+    @GetMapping()
+    public Page<ProductDto> getProducts(
+            @RequestParam(name = "page", defaultValue = "1") Integer page,
+            @RequestParam(name = "min_cost", required = false) Integer minCost,
+            @RequestParam(name = "max_cost", required = false) Integer maxCost,
+            @RequestParam(name = "title_part", required = false) String titlePart
+    ) {
+        if (page < 1) {
+            page = 1;
+        }
+        return productService.find(minCost, maxCost, titlePart, page).map(ProductDto::new);
     }
 
-    @PostMapping("/app/products")
+    @PostMapping()
     public void saveNewProduct(@RequestBody Product product) {
-        productService.addNewProductToRepo(product);
+        product.setId(null);
+        productService.save(product);
     }
 
-    @GetMapping("/app/products/delete/{id}")
+    @PutMapping()
+    public void saveProduct(@RequestBody Product product) {
+        productService.save(product);
+    }
+
+    @DeleteMapping("/delete/{id}")
     public void deleteProductFromRepoById(@PathVariable Long id) {
         productService.deleteProductFromRepoById(id);
     }
