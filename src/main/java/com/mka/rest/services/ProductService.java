@@ -43,7 +43,7 @@ public class ProductService {
         return products;
     }
 
-    public void addNewProductToRepo(Product product) {
+    public void save(Product product) {
         productRepository.save(product);
     }
 
