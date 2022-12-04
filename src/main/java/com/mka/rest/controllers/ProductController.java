@@ -1,5 +1,6 @@
 package com.mka.rest.controllers;
 
+import com.mka.rest.dto.ProductDto;
 import com.mka.rest.models.Product;
 import com.mka.rest.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class ProductController {
     }
 
     @GetMapping()
-    public Page<Product> getProducts(
+    public Page<ProductDto> getProducts(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "min_cost", required = false) Integer minCost,
             @RequestParam(name = "max_cost", required = false) Integer maxCost,
@@ -27,7 +28,7 @@ public class ProductController {
         if (page < 1) {
             page = 1;
         }
-        return productService.find(minCost, maxCost, titlePart, page);
+        return productService.find(minCost, maxCost, titlePart, page).map(ProductDto::new);
     }
 
     @PostMapping()

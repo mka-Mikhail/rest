@@ -15,4 +15,6 @@ public class Product {
     private String title;
     @Column(name = "cost")
     private Integer cost;
+    @Column(name = "article")
+    private String article;
 }
