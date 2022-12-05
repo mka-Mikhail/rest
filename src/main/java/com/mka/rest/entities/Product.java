@@ -1,9 +1,13 @@
-package com.mka.rest.models;
+package com.mka.rest.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "products")
 public class Product {
@@ -15,6 +19,4 @@ public class Product {
     private String title;
     @Column(name = "cost")
     private Integer cost;
-    @Column(name = "article")
-    private String article;
 }

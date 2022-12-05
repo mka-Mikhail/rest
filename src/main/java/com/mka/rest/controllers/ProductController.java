@@ -1,25 +1,23 @@
 package com.mka.rest.controllers;
 
+import com.mka.rest.converters.ProductConverter;
 import com.mka.rest.dto.ProductDto;
-import com.mka.rest.models.Product;
+import com.mka.rest.entities.Product;
 import com.mka.rest.services.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/app/api/v1/products")
 public class ProductController {
 
     private final ProductService productService;
-
-    @Autowired
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
+    private final ProductConverter productConverter;
 
     @GetMapping()
-    public Page<ProductDto> getProducts(
+    public Page<ProductDto> getProductsPage(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
             @RequestParam(name = "min_cost", required = false) Integer minCost,
             @RequestParam(name = "max_cost", required = false) Integer maxCost,
@@ -28,22 +26,33 @@ public class ProductController {
         if (page < 1) {
             page = 1;
         }
-        return productService.find(minCost, maxCost, titlePart, page).map(ProductDto::new);
+        return productService.findAll(minCost, maxCost, titlePart, page).map(
+                productConverter::entityToDto
+        );
+    }
+
+    @GetMapping("/{id}")
+    public ProductDto getProductById(@PathVariable Long id) {
+        Product product = productService.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Продукта нет в базе");
+        return productConverter.entityToDto(product);
     }
 
     @PostMapping()
-    public void saveNewProduct(@RequestBody Product product) {
-        product.setId(null);
-        productService.save(product);
+    public ProductDto saveNewProduct(@RequestBody ProductDto productDto) {
+        Product product = productConverter.dtoToEntity(productDto);
+        product = productService.save(product);
+        return productConverter.entityToDto(product);
     }
 
     @PutMapping()
-    public void saveProduct(@RequestBody Product product) {
-        productService.save(product);
+    public ProductDto updateProduct(@RequestBody ProductDto productDto) {
+        Product product = productService.update(productDto);
+        return productConverter.entityToDto(product);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteProductFromRepoById(@PathVariable Long id) {
-        productService.deleteProductFromRepoById(id);
+    public void deleteProductById(@PathVariable Long id) {
+        productService.deleteById(id);
     }
 }

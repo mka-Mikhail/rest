@@ -1,6 +1,6 @@
 package com.mka.rest.repositories.specifications;
 
-import com.mka.rest.models.Product;
+import com.mka.rest.entities.Product;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ProductSpecifications {
