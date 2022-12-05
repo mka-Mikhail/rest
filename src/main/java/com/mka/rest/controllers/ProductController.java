@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/app/api/v1/products")
@@ -41,11 +43,22 @@ public class ProductController {
         return productConverter.entityToDto(product);
     }
 
+    @GetMapping("/cart")
+    public List<ProductDto> getProductInCart() {
+        return productService.getProductsInCart().stream().map(productConverter::entityToDto).toList();
+    }
+
     @PostMapping()
     public ProductDto saveNewProduct(@RequestBody ProductDto productDto) {
         productValidator.validate(productDto);
         Product product = productConverter.dtoToEntity(productDto);
         product = productService.save(product);
+        return productConverter.entityToDto(product);
+    }
+
+    @PostMapping("/cart")
+    public ProductDto addProductToCart(@RequestBody Long id) {
+        Product product = productService.addProductToCart(id);
         return productConverter.entityToDto(product);
     }
 
@@ -59,5 +72,10 @@ public class ProductController {
     @DeleteMapping("/delete/{id}")
     public void deleteProductById(@PathVariable Long id) {
         productService.deleteById(id);
+    }
+
+    @DeleteMapping("/cart/delete/{id}")
+    public void deleteProductFromCart(@PathVariable Long id) {
+        productService.deleteProductByIdFromCart(id);
     }
 }
