@@ -1,6 +1,7 @@
 package com.mka.rest.services;
 
 import com.mka.rest.dto.ProductDto;
+import com.mka.rest.exceptions.ResourceNotFoundException;
 import com.mka.rest.repositories.IProductRepository;
 import com.mka.rest.entities.Product;
 import com.mka.rest.repositories.specifications.ProductSpecifications;
