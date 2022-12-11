@@ -1,4 +1,4 @@
-package com.mka.rest.dto;
+package com.mka.rest.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDto {
-    private Long id;
-    private String title;
-    private Integer cost;
+public class AppError {
+    private int statusCode;
+    private String message;
 }

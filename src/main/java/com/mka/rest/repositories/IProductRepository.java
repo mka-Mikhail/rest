@@ -1,6 +1,6 @@
 package com.mka.rest.repositories;
 
-import com.mka.rest.models.Product;
+import com.mka.rest.entities.Product;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 

@@ -11,12 +11,12 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
                 max_cost: $scope.filter ? $scope.filter.max_cost : null,
             }
         }).then(function (response) {
-            $scope.productList = response.data.content;
+            $scope.productsPage = response.data.content;
         });
     };
 
     $scope.deleteProductFromRepoById = function (productId) {
-        $http.get(contextPath + '/products/delete/' + productId).then(function (response) {
+        $http.delete(contextPath + '/products/delete/' + productId).then(function (response) {
             $scope.loadProducts();
         });
     };
@@ -26,6 +26,26 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             $scope.loadProducts();
         });
     };
+
+    $scope.loadCart = function () {
+        $http.get(contextPath + '/products/cart').then(function (response) {
+            $scope.listOfCart = response.data;
+        });
+    };
+
+    $scope.deleteProductFromCart = function (productIdInCart) {
+        $http.delete(contextPath + '/products/cart/delete/' + productIdInCart).then(function (response) {
+            $scope.loadCart() ;
+        });
+    };
+
+    $scope.addProductToCart = function (productIdToCart) {
+        $http.post(contextPath + '/products/cart', productIdToCart).then(function (response) {
+            $scope.loadCart();
+        });
+    };
+
+    $scope.loadCart();
 
     $scope.loadProducts();
 });
