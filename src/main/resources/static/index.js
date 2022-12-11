@@ -35,7 +35,7 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
 
     $scope.deleteProductFromCart = function (productIdInCart) {
         $http.delete(contextPath + '/products/cart/delete/' + productIdInCart).then(function (response) {
-            $scope.loadCart();
+            $scope.loadCart() ;
         });
     };
 
